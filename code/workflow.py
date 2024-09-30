@@ -177,7 +177,11 @@ class RetentionFlow(Workflow):
                 Based on the analysis of compensation, performance reviews, benefits enrollment, and engagement survey responses,
                 provide a comprehensive retention recommendation for the employee.
                 
-                For each recommendation you make, reference specific points from the analysis that supports it.
+                For each recommendation you make, provide a rationale about why you're making this recommendation 
+                (e.g. employee's compensation is below industry benchmark, or employee raised concerns about long hours in the engagement survey).
+
+                Do not provide recommendation if you are not able to support it with data from analysis.
+                
                 Keep your recommendations concise and to the point.
                 -----------------------------------
                 Compensation analysis: {ctx.data['comp_analysis']}
@@ -189,9 +193,6 @@ class RetentionFlow(Workflow):
                 Engagement survey analysis: {ctx.data['survey_analysis']}
                 
                 """
-
-        
-        st.write(prompt)
 
         response = self.query_engine.query(prompt)
         
