@@ -1,1 +1,10 @@
 jupyterlab>3.0
+pandas
+streamlit==1.37.1
+Faker==20.0.0
+scikit-learn==1.5.1
+llama-index==0.11.14
+llama-index-embeddings-nvidia==0.2.2
+llama-index-llms-nvidia==0.2.5
+fpdf
+chromadb==0.4.24

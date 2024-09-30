@@ -87,12 +87,31 @@ environment:
       name: ""
       target: ""
 execution:
-  apps: []
+  apps:
+  - name: Streamlit
+    type: custom
+    class: webapp
+    start_command: cd /project/code && streamlit run app.py --server.port=8080 --theme.primaryColor="#FF6347"
+      --theme.base="dark"
+    health_check_command: curl -f "http://localhost:8080/"
+    stop_command: pkill -f '^streamlit run app.py'
+    user_msg: ""
+    logfile_path: ""
+    timeout_seconds: 60
+    icon_url: ""
+    webapp_options:
+      autolaunch: true
+      port: "8080"
+      proxy:
+        trim_prefix: true
+      url: http://localhost:8080/
   resources:
     gpu:
       requested: 0
     sharedMemoryMB: 0
-  secrets: []
+  secrets:
+  - variable: NVIDIA_API_KEY
+    description: ""
   mounts:
   - type: project
     target: /project/
