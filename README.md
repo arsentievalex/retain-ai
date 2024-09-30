@@ -17,5 +17,12 @@ Employee turnover is a major financial challenge for businesses, costing U.S. co
 - **Data**: Includes employee details such as tenure, compensation, performance scores, and promotion history. For the demo, a fictional employee dataset is used.
 
 ## Getting Started
-Optional section to summarize important steps and how to use the project & apps in the project
+1. Download and install [NVIDIA AI Workbench](https://www.nvidia.com/en-us/deep-learning-ai/solutions/data-science/workbench/)
+
+2. Clone the repository
+
+``git clone https://github.com/arsentievalex/retain-ai.git``
+
+3. Set up your NVIDIA API KEY in secrets.
+
 
