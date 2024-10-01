@@ -15,7 +15,7 @@ Employee turnover is a major financial challenge for businesses, costing U.S. co
 
 ## Architecture
 
-<img src="https://i.postimg.cc/mkKDNK7k/retainai-architecture.png"/>
+![Image description](/img/retainai_architecture.png)
 
 - **Frontend**: Built with Streamlit, allowing users to interact with the app via a simple, web-based interface.
 - **Backend**: Hosted on NVIDIA AI Workbench, using a Random Forest Classifier for attrition prediction and a Llama-Index workflow with llama-3.1-70b-instruct hosted on NVIDIA API catalogue to generate retention strategies.
