@@ -22,7 +22,7 @@ Employee turnover is a major financial challenge for businesses, costing U.S. co
 
 Below is representation of the Llama-Index workflow:
 
-<img src="https://i.postimg.cc/GmF2G7t3/retainai-workflow.png"/>
+![Image description](/img/retainai_workflow.png)
 
 - **Data**: Includes employee details such as tenure, compensation, performance scores, and promotion history. For the demo, a fictional employee dataset is used. Additionaly, 2 PDF files with unstructured data are embedded, stored in local vector db and used for RAG by the model.
 
