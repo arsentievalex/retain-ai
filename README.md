@@ -21,6 +21,7 @@ Employee turnover is a major financial challenge for businesses, costing U.S. co
 - **Backend**: Hosted on NVIDIA AI Workbench, using a Random Forest Classifier for attrition prediction and a Llama-Index workflow with llama-3.1-70b-instruct hosted on NVIDIA API catalogue to generate retention strategies.
 
 Below is representation of the Llama-Index workflow:
+
 <img src="https://i.postimg.cc/GmF2G7t3/retainai-workflow.png"/>
 
 - **Data**: Includes employee details such as tenure, compensation, performance scores, and promotion history. For the demo, a fictional employee dataset is used. Additionaly, 2 PDF files with unstructured data are embedded, stored in local vector db and used for RAG by the model.
