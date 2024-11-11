@@ -8,3 +8,6 @@ llama-index-embeddings-nvidia==0.2.2
 llama-index-llms-nvidia==0.2.5
 fpdf
 chromadb==0.4.24
+fuzzywuzzy
+python-Levenshtein
+streamlit-pdf-viewer
