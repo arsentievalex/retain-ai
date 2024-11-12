@@ -36,7 +36,7 @@ def get_employee_snapshot(selected_row_df):
     # compose a string about selected employee
     employee_details = f"""
     The employee {selected_row_df['Full Name'].values[0]} is a {selected_row_df['Role'].values[0]} 
-    at {selected_row_df['Department'].values[0]} department with high risk of attrition.
+    at {selected_row_df['Department'].values[0]} department.
     
     Below is more information about the employee:
     - Tenure: {selected_row_df['Tenure'].values[0]} year(s)
@@ -115,6 +115,7 @@ def get_employee_snapshot(selected_row_df):
     return employee_snapshot
 
 
+@st.cache_resource(show_spinner=False)
 def get_query_engine():
     Settings.text_splitter = SentenceSplitter(chunk_size=256)
 
@@ -134,6 +135,14 @@ def get_query_engine():
     query_engine = index.as_query_engine(similarity_top_k=5, streaming=True)
 
     return query_engine
+
+
+@st.cache_resource(show_spinner=False)
+def get_chat_engine(context):
+
+    llm = NVIDIA(model="meta/llama-3.1-8b-instruct", temperature=0, streaming=True)
+
+    return llm
 
 
 # Function to create PDF

@@ -50,7 +50,7 @@ class RetentionFlow(Workflow):
         1. How does current salary of this employee compare to the industry benchmark? 
         2. Consider starting and current salary of the employee. How does the salary growth compare to industry standard?
         -----------------------------------
-        The employee details are as follows:
+        The employee with high risk of attrition is:
         {st.session_state['employee_snapshot']}
         """
 
@@ -82,7 +82,7 @@ class RetentionFlow(Workflow):
                 1. Based on the performance reviews, what are the key strengths and areas of improvement for the employee?
                 2. How do the performance reviews align with the attrition risk?
                 -----------------------------------
-                The employee details are as follows:
+                The employee with high risk of attrition is:
                 {st.session_state['employee_snapshot']}
                 """
 
@@ -115,7 +115,7 @@ class RetentionFlow(Workflow):
                 2. Are there any benefits that could be offered to improve employee satisfaction and retention? 
                 Use the benefits documentation for reference.
                 -----------------------------------
-                The employee details are as follows:
+                The employee with high risk of attrition is:
                 {st.session_state['employee_snapshot']}
                 """
 
@@ -147,7 +147,7 @@ class RetentionFlow(Workflow):
                 1. What are the key factors affecting employee engagement and satisfaction?
                 2. Are there any areas of improvement based on the survey responses?
                 -----------------------------------
-                The employee details are as follows:
+                The employee with high risk of attrition is:
                 {st.session_state['employee_snapshot']}
                 """
 

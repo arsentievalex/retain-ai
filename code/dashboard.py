@@ -7,7 +7,7 @@ from joblib import dump, load
 
 
 def main():
-    st.title('RetainAI Dashboard')
+    st.title('RetainAI: Dashboard')
     
     if "employee_df" not in st.session_state and "employee_mappings" not in st.session_state:
         st.warning("Start with Data Upload tab to upload your files or use sample dataset")
@@ -29,11 +29,7 @@ def main():
     
     df['Attrition Probability'] = predictions
     
-    # df = pd.read_csv('/project/data/predicted_ap.csv')
     df_feature_importance = pd.read_csv('/project/data/feature_importance.csv')
-    
-    # # filter to keep only sales
-    # df = df[df['Department'] == 'Sales']
     
     # round to 2 decimals
     df = df.round(2)

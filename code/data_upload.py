@@ -92,15 +92,15 @@ def show_column_mapping_interface(df, expected_columns, session_key):
 
 
 # Main App
+st.title('RetainAI: Data Uploads')
 st.session_state['demo_mode'] = st.toggle("Use sample data")
-
 st.header("CSV Uploads")
 
 # define expected columns for mapping
-expected_columns_1 = ['No mapping available', 'Employee ID','Full Name', 'Gender', 'Age', 'Tenure', 'Role', 'Department', 'Starting Salary', 'Current Salary', 'Location', 'Contract', 'Years of Experience', 'Average Monthly Working Hours', 'Months in Role', 'Promotion History', 'Last Performance Review Score']
-expected_columns_2 = ['No mapping available', 'Employee ID', 'Category', 'Enrollment Status']
-expected_columns_3 = ['No mapping available', 'Employee ID', 'Fiscal Quarter', 'Score', 'Performance Review Summary']
-expected_columns_4 = ['No mapping available', 'Employee ID', 'Question', 'Score', 'Comment']
+expected_columns_1 = ['Employee ID','Full Name', 'Gender', 'Age', 'Tenure', 'Role', 'Department', 'Starting Salary', 'Current Salary', 'Location', 'Contract', 'Years of Experience', 'Average Monthly Working Hours', 'Months in Role', 'Promotion History', 'Last Performance Review Score']
+expected_columns_2 = ['Employee ID', 'Category', 'Enrollment Status']
+expected_columns_3 = ['Employee ID', 'Fiscal Quarter', 'Score', 'Performance Review Summary']
+expected_columns_4 = ['Employee ID', 'Question', 'Score', 'Comment']
 
 
 # CSV File 1
