@@ -55,10 +55,10 @@ Below is representation of the Llama-Index workflow used for retention recommend
 
 2. Obtain an API key from [NVIDIA API Catalog](https://build.nvidia.com/explore/discover)
 
-3. Clone the repository
+3. Open NVIDIA AI Workbench, select "Clone Project" and paste the below repository URL.
 
-``git clone https://github.com/arsentievalex/retain-ai.git``
+``https://github.com/arsentievalex/retain-ai.git``
 
-3. Set up your NVIDIA API KEY in secrets.
+4. Set up your NVIDIA API KEY in secrets.
 
 
