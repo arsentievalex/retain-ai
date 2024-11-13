@@ -38,11 +38,11 @@ RetainAI combines these traditional predictive methods with the power of generat
 
 - **Data Handling**: RetainAI allows flexibility for users to either work with sample data or upload their own data files, enabling a customized and relevant analysis experience.
 
-CSV Uploads: Users can upload their own CSV files for attrition prediction, as long as they match the required column names and formats. This ensures accurate model predictions based on data specific to their organization.
+*CSV Uploads*: Users can upload their own CSV files for attrition prediction, as long as they match the required column names and formats. This ensures accurate model predictions based on data specific to their organization.
 
-PDF Uploads: Users can also upload PDF files containing qualitative data, such as industry reports or benefits docs specific to their company. These documents are processed using RAG engine, which stores embedded representations in a local vector database. This enables the LLM to retrieve and analyze relevant information from these unstructured sources to enrich retention strategies.
+*PDF Uploads*: Users can also upload PDF files containing qualitative data, such as industry reports or benefits docs specific to their company. These documents are processed using RAG engine, which stores embedded representations in a local vector database. This enables the LLM to retrieve and analyze relevant information from these unstructured sources to enrich retention strategies.
 
-Sample Data: For users looking to explore the app's features without uploading their own files, RetainAI provides sample CSV and PDF data. This includes fictional employee records and sample documents, allowing users to quickly get started and experience the app's full functionality.
+*Sample Data*: For users looking to explore the app's features without uploading their own files, RetainAI provides sample CSV and PDF data. This includes fictional employee records and sample documents, allowing users to quickly get started and experience the app's full functionality.
 
 
 ## Workflow
@@ -55,10 +55,20 @@ Below is representation of the Llama-Index workflow used for retention recommend
 
 2. Obtain an API key from [NVIDIA API Catalog](https://build.nvidia.com/explore/discover)
 
-3. Open NVIDIA AI Workbench, select "Clone Project" and paste the below repository URL.
+3. Open NVIDIA AI Workbench on your machine, select "Clone Project" and paste the below repository URL.
 
 ``https://github.com/arsentievalex/retain-ai.git``
 
 4. Set up your NVIDIA API KEY in secrets.
 
+5. Start Environment and click "Open Streamlit" to run the web app.
 
+6. Upload your CSV and PDF files on the "Data Upload" page, or use the sample data provided. The uploaded CSV files should contain the required columns and data types. For more information, refer to the FAQ page in the web app.
+
+7. Once the data is loaded, navigate to the "Dashboard" to view the list of employees with their predicted attrition probabilities. Employees with an attrition probability greater than 50% are marked as high risk (indicated with an exclamation point).
+
+8. In the "AP Methodology" tab, you can view the key factors the model uses to predict employee attrition. Each factor’s importance score shows how much it influences the likelihood of an employee leaving.
+
+9. Select an employee and click "Retention Recommendation." The LLM model will generate a personalized retention strategy, which you can download as a PDF file.
+
+10. On the "Chat" page, you can ask questions about your entire team (not just individual employees). For example, you might ask, "Which employees are not satisfied with work-life balance?" or "Which employees performed poorly in the Q3 performance review?"
