@@ -131,9 +131,9 @@ with st.expander("4. How does the tool process my data?"):
     """)
 
 
-with st.expander("5. Can I download the results?"):
+with st.expander("5. How accurate is the attrition prediction?"):
     st.write("""
-    Yes, after generating a personalized retention recommendation, you can download it as PDF file.
+    The model was trained on a relatively small sample dataset for the purpose of the hackathon. The current accuracy score on test (unseen) data is 78%.
     """)
 
 
@@ -141,5 +141,21 @@ with st.expander("6. Can I adjust the weights of the prediction model?"):
     st.write("""
     No, currently there is no option to adjust the weights of the attrition prediction model. The app is designed primarily for business users, not necessarily for technical users.
     """)
-    
 
+
+with st.expander("7. Can I download the retention recommendation?"):
+    st.write("""
+    Yes, after generating a personalized retention recommendation, you can download it as PDF file.
+    """)
+
+
+with st.expander("8. What can I use chat functionality for?"):
+    st.write("""
+    You can use chat functionality to ask questions about your team, such as 'Which employee is not satisfied with work-life balance?' or 'Who has the lowest performance review score?'.
+    """)
+
+
+with st.expander("9. What data is referenced in the chat mode?"):
+    st.write("""
+    In the chat mode, the AI references the employee-related data from CSV files (employee data, benefits enrollment, performance reviews, engagement survey results).
+    """)

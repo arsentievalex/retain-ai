@@ -33,10 +33,22 @@ def rename_and_filter_columns(df, column_mappings):
     
 
 def get_employee_snapshot(selected_row_df):
-    # compose a string about selected employee
+    """
+    Generates a detailed employee snapshot by composing information from multiple data sources, including
+    personal details, performance reviews, benefits enrollment, and engagement survey responses.
+
+    Parameters:
+        selected_row_df (DataFrame): A DataFrame containing information about the selected employee.
+    
+    Returns:
+        str: A formatted string summarizing the employee's details, including role, department, 
+             tenure, salary history, performance reviews, benefits enrollment, and engagement survey responses.
+    """
+    
+    # Compose basic details about the employee using provided DataFrame columns.
     employee_details = f"""
     The employee {selected_row_df['Full Name'].values[0]} is a {selected_row_df['Role'].values[0]} 
-    at {selected_row_df['Department'].values[0]} department.
+    in the {selected_row_df['Department'].values[0]} department.
     
     Below is more information about the employee:
     - Tenure: {selected_row_df['Tenure'].values[0]} year(s)
@@ -52,18 +64,15 @@ def get_employee_snapshot(selected_row_df):
     - Contract: {selected_row_df['Contract'].values[0]}
     """
 
-    # get additional data from performance review table if it exists
-    if "reviews_df" in st.session_state:
-        df_performance = st.session_state["reviews_df"]
-    
-        # filter to keep only selected employee
+    # Gather performance review details if available
+    if "performance reviews_df" in st.session_state:
+        df_performance = st.session_state["performance reviews_df"]
         df_performance = df_performance[df_performance['Employee ID'] == selected_row_df['Employee ID'].values[0]]
-    
-        # Initialize an empty string to store the performance reviews
+        
         performance_review = "Previous Performance Reviews of the employee:\n"
-
-        # Loop through the available rows of the filtered DataFrame
-        for index, row in df_performance.iterrows():
+        
+        # Append each performance review to the string
+        for _, row in df_performance.iterrows():
             performance_review += f"""
             - Fiscal Quarter: {row['Fiscal Quarter']}
             - Score: {row['Score']}
@@ -72,35 +81,29 @@ def get_employee_snapshot(selected_row_df):
     else:
         performance_review = "No performance review data available for the selected employee."
 
-    # get additional data from benefits enrollment table if it exists
-    if "benefits_df" in st.session_state:
-        df_benefits = st.session_state["benefits_df"]
-    
-        # filter to keep only selected employee
+    # Gather benefits enrollment details if available
+    if "benefits enrollment_df" in st.session_state:
+        df_benefits = st.session_state["benefits enrollment_df"]
         df_benefits = df_benefits[df_benefits['Employee ID'] == selected_row_df['Employee ID'].values[0]]
-    
-        # compose a string about benefits enrollment
+        
         benefits_enrollment = "Benefits Enrollment of the employee:\n"
-    
-        # Append each category with enrollment status to the string
+        
+        # List each benefit category and enrollment status
         for _, row in df_benefits.iterrows():
             category = row["Category"]
-            status = "True" if row["Enrollment Status"] else "False"
+            status = "Enrolled" if row["Enrollment Status"] else "Not Enrolled"
             benefits_enrollment += f"- {category}: {status}\n"
     else:
         benefits_enrollment = "No benefits enrollment data available for the selected employee."
 
-    # get additional data from engagement survey table if it exists
-    if "survey_df" in st.session_state:
-        df_engagement = st.session_state["survey_df"]
-    
-        # filter to keep only selected employee
+    # Gather engagement survey responses if available
+    if "engagement survey_df" in st.session_state:
+        df_engagement = st.session_state["engagement survey_df"]
         df_engagement = df_engagement[df_engagement['Employee ID'] == selected_row_df['Employee ID'].values[0]]
-    
-        # Initialize an empty string to store the engagement survey responses
+        
         engagement_survey = "Engagement Survey Responses of the employee:\n"
         
-        # Append each question, score, and comment to the string
+        # Append each survey question, score, and comment
         for _, row in df_engagement.iterrows():
             question = row["Question"]
             score = row["Score"]
@@ -109,29 +112,44 @@ def get_employee_snapshot(selected_row_df):
     else:
         engagement_survey = "No engagement survey data available for the selected employee."
 
-    # compose all into a single string
+    # Combine all sections into a single formatted string
     employee_snapshot = employee_details + "\n" + performance_review + "\n" + benefits_enrollment + "\n" + engagement_survey
-
+    
     return employee_snapshot
 
 
 @st.cache_resource(show_spinner=False)
 def get_query_engine():
+    """
+    Initializes and returns a query engine for retrieval-augmented generation (RAG) using uploaded or sample PDF documents.
+    Sets up document embeddings and the query engine with an NVIDIA language model.
+    
+    Returns:
+        QueryEngine: A query engine configured with embeddings and large language model (LLM) for document-based queries.
+    """
+    # Configure text splitter settings for chunking text into manageable pieces
     Settings.text_splitter = SentenceSplitter(chunk_size=256)
 
+    # Set demo mode to false if not explicitly provided
     if 'demo_mode' not in st.session_state:
         st.session_state['demo_mode'] = False
 
-    # load sample pdf docs if user did not upload their files
+    # Load documents from sample or uploaded files based on demo mode setting
     if st.session_state['demo_mode']:
         documents = SimpleDirectoryReader("/project/data/sample_pdf").load_data()
     else:
         documents = SimpleDirectoryReader("/project/data/uploaded_pdf").load_data()
-        
+
+    # Load embedding model for question-answering capabilities
     Settings.embed_model = NVIDIAEmbedding(model="NV-Embed-QA", truncate="END")
 
+    # Create a document index for similarity-based retrieval
     index = VectorStoreIndex.from_documents(documents)
+    
+    # Configure the large language model (LLM) for generating responses
     Settings.llm = NVIDIA(model="meta/llama-3.1-70b-instruct", max_tokens=1024)
+    
+    # Initialize the query engine with top-K similarity search and streaming enabled
     query_engine = index.as_query_engine(similarity_top_k=5, streaming=True)
 
     return query_engine
@@ -139,53 +157,90 @@ def get_query_engine():
 
 @st.cache_resource(show_spinner=False)
 def get_chat_engine(context):
-
-    llm = NVIDIA(model="meta/llama-3.1-8b-instruct", temperature=0, streaming=True)
-
+    """
+    Initializes and returns a chat engine using NVIDIA's large language model (LLM).
+    
+    Parameters:
+        context (str): Initial context for the chat model to provide more tailored responses.
+    
+    Returns:
+        NVIDIA: A pre-configured LLM instance for interactive chat responses.
+    """
+    # Create an LLM instance with a stable temperature setting for more controlled responses
+    llm = NVIDIA(model="meta/llama-3.1-70b-instruct", temperature=0, streaming=True)
     return llm
 
 
-# Function to create PDF
 def create_pdf(text):
+    """
+    Creates a PDF document from the provided text.
+
+    Parameters:
+        text (str): The text content to include in the PDF.
+    
+    Returns:
+        bytes: PDF file data in bytes for download or further processing.
+    """
+    # Initialize PDF with auto page break and set font
     pdf = FPDF()
     pdf.add_page()
     pdf.set_auto_page_break(auto=True, margin=15)
     pdf.set_font("Arial", size=12)
 
-    # Add text to the PDF
+    # Add the provided text content to the PDF, supporting multi-line content
     pdf.multi_cell(0, 10, text)
 
-    # Save the PDF in memory
+    # Return the PDF as byte data
     pdf_output = pdf.output(dest='S').encode('latin1')
     return pdf_output
 
 
-# Function to download the PDF
 def download_pdf(pdf_data, filename):
+    """
+    Creates a download link for a PDF file using base64 encoding.
+
+    Parameters:
+        pdf_data (bytes): Byte data of the PDF file.
+        filename (str): The name for the downloaded file.
+    
+    Returns:
+        None: Displays a clickable download link in Streamlit.
+    """
+    # Encode PDF data as base64 for safe embedding in HTML
     b64_pdf = base64.b64encode(pdf_data).decode('latin1')
+    
+    # Generate the HTML link for downloading the PDF
     download_link = f'<a href="data:application/pdf;base64,{b64_pdf}" download="{filename}">Click here to download PDF</a>'
     st.markdown(download_link, unsafe_allow_html=True)
 
 
-# Feature Engineering
 def feature_engineering(df):
+    """
+    Performs feature engineering on the provided DataFrame by calculating new metrics related to salary,
+    tenure, and promotion history. This prepares the data for input to an attrition prediction model.
 
-    # Drop irrelevant columns
+    Parameters:
+        df (DataFrame): The input DataFrame containing employee data.
+    
+    Returns:
+        DataFrame: The transformed DataFrame with additional features and cleaned columns.
+    """
+    # Drop columns irrelevant to model training or prediction
     df = df.drop(['Full Name', 'ID', 'Start Date', 'End Date'], axis=1, errors='ignore')
     
-    # Salary Percentage Change
+    # Calculate percentage change in salary from starting to current salary
     df['Salary Percentage Change'] = (df['Current Salary'] - df['Starting Salary']) / df['Starting Salary']
  
-    # Salary Raise Per Year
-    # To avoid division by zero, add a small epsilon where Tenure is zero
+    # Salary Raise Per Year calculation (handles zero tenure)
+    # Avoid division by zero by adding a small value where Tenure is zero
     epsilon = 1e-6
     df['Adjusted Tenure'] = df['Tenure'].apply(lambda x: x if x > 0 else epsilon)
     df['Salary Raise Per Year'] = (df['Current Salary'] - df['Starting Salary']) / df['Adjusted Tenure']
 
-    # Promotion Frequency
+    # Calculate promotion frequency over tenure period
     df['Promotion Frequency'] = df['Promotion History'] / df['Adjusted Tenure']
 
-    # Drop the Adjusted Tenure column as it's no longer needed
+    # Drop the temporary Adjusted Tenure column
     df = df.drop('Adjusted Tenure', axis=1)
 
     return df

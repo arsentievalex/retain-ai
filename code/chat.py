@@ -8,7 +8,7 @@ def main():
     st.title("Retain AI: Chat")
     
     
-    if "employee_df" not in st.session_state and "employee_mappings" not in st.session_state:
+    if "employee data_df" not in st.session_state and "employee_mappings" not in st.session_state:
         st.warning("Start with Data Upload tab to upload your files or use sample dataset")
         return
     
@@ -20,8 +20,8 @@ def main():
     
     # Get snapshots of all employees for passing to LLM context
     full_snapshot = "\n".join(
-        get_employee_snapshot(st.session_state["employee_df"].iloc[[index]]) 
-        for index, _ in st.session_state["employee_df"].iloc[:10].iterrows()
+        get_employee_snapshot(st.session_state["employee data_df"].iloc[[index]]) 
+        for index, _ in st.session_state["employee data_df"].iloc[:10].iterrows()
     )
     
     if "messages" not in st.session_state.keys():  # Initialize the chat messages history
