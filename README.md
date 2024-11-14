@@ -3,7 +3,9 @@
 
 **RetainAI** is a web-based application designed to help managers predict employee attrition and generate personalized retention strategies. Utilizing machine learning (ML) and advanced large language models (LLMs), RetainAI provides actionable, data-driven insights, empowering businesses to address turnover proactively and enhance employee satisfaction through customized retention recommendations.
 
-[Watch the demo video on YouTube](https://youtu.be/yS0RuteEBoI)
+[Watch the demo video on YouTube](https://youtu.be/lnlkiaiiKQ8)
+
+[Watch the detailed walkthrough on YouTube](https://youtu.be/ugWxmZBZ54c)
 
 
 ## Overview
