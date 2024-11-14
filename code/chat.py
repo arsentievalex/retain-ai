@@ -3,61 +3,52 @@ from utils import get_chat_engine, get_query_engine, get_employee_snapshot
 from llama_index.core.llms import ChatMessage, MessageRole
 from llama_index.core import PromptTemplate
 
-
+# Main function for the chat interface
 def main():
+    # Set up the title for the chat page
     st.title("Retain AI: Chat")
     
-    
+    # Check if essential data is loaded; if not, prompt user to start with data upload
     if "employee data_df" not in st.session_state and "employee_mappings" not in st.session_state:
         st.warning("Start with Data Upload tab to upload your files or use sample dataset")
         return
     
-    # in case when user switched sample data toggle multiple times and did not load the data
-    elif st.session_state['demo_mode']==False and "employee_mappings" not in st.session_state:
+    # Ensure data is loaded properly, handling cases where demo mode is toggled without loading data
+    elif st.session_state['demo_mode'] == False and "employee_mappings" not in st.session_state:
         st.warning("Start with Data Upload tab to upload your files or use sample dataset")
         return
-        
-    
-    # Get snapshots of all employees for passing to LLM context
+
+    # Generate a full snapshot of all employees to provide necessary context for the LLM model
     full_snapshot = "\n".join(
         get_employee_snapshot(st.session_state["employee data_df"].iloc[[index]]) 
         for index, _ in st.session_state["employee data_df"].iloc[:10].iterrows()
     )
-    
-    if "messages" not in st.session_state.keys():  # Initialize the chat messages history
+
+    # Initialize chat messages history if it doesn't already exist
+    if "messages" not in st.session_state.keys():
         st.session_state.messages = [
             {
                 "role": "assistant",
-                "content": "Ask me a question your team",
+                "content": "Ask me a question about your team",
             }
         ]
+
+    # Initialize the chat engine instance
+    chat_engine = get_chat_engine()
     
-    #chat_engine = get_query_engine()
-    chat_engine = get_chat_engine(context="")
-    
-    
-    if "chat_engine" not in st.session_state.keys():  # Initialize the chat engine
+    if "chat_engine" not in st.session_state.keys():
         st.session_state.chat_engine = chat_engine
-    
-    if prompt := st.chat_input(
-        "Ask a question"
-    ):  # Prompt for user input and save to chat history
+
+    # Display input prompt to allow user to ask a question and add it to message history
+    if prompt := st.chat_input("Ask a question"):
         st.session_state.messages.append({"role": "user", "content": prompt})
     
-    for message in st.session_state.messages:  # Write message history to UI
+    # Display chat history on the UI
+    for message in st.session_state.messages:
         with st.chat_message(message["role"]):
             st.write(message["content"])
     
-    # messages = [
-    #     ChatMessage(
-    #         role=MessageRole.SYSTEM, content=("You are a helpful assistant.")
-    #     ),
-    #     ChatMessage(
-    #         role=MessageRole.USER,
-    #         content=(prompt),
-    #     ),
-    # ]
-    
+    # Define prompt template with context and user query for the LLM to generate responses
     template = (
         "We have provided context information below. \n"
         "---------------------\n"
@@ -67,21 +58,24 @@ def main():
     )
     qa_template = PromptTemplate(template)
     
+    # Format the messages with context (employee snapshot) and user query
     messages = qa_template.format_messages(context_str=full_snapshot, query_str=prompt)
     
-    # If last message is not from assistant, generate a new response
+    # If last message is from the user, generate a response from the assistant
     if st.session_state.messages[-1]["role"] != "assistant":
         with st.chat_message("assistant"):
             response = st.session_state.chat_engine.chat(messages)
-    
+
+            # Stream the assistant's response to the UI as it is generated
             placeholder = st.empty()
             full_response = ""
             for chunk in response.message.content:
                 full_response += chunk
                 placeholder.markdown(full_response)
             
+            # Add the assistant's response to message history
             message = {"role": "assistant", "content": full_response}
-            # Add response to message history
             st.session_state.messages.append(message)
 
+# Run the main function to launch the chat interface
 main()

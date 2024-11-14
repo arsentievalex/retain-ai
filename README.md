@@ -11,7 +11,9 @@ Employee turnover remains a significant cost factor, with U.S. businesses incurr
 
 
 ## Key Features
-- **Data Uploads for Analysis**: Allows users to upload CSV files with employee data or relevant documents (e.g., benefits documentation, survey results) to enrich the AI's understanding and generate more personalized recommendations. PDF files can also be embedded into a local vector database for use in retrieval-augmented generation (RAG).
+- **Data Uploads**: Allows users to upload CSV files with employee data or relevant PDF documents (e.g., benefits documentation, industry trends) to enrich the AI's understanding and generate more personalized recommendations.
+
+- **Field Mapping UI** This interface allows users to map their custom CSV columns to the required fields used by the attrition prediction model. The app includes a semi-automated mapping process powered by fuzzy matching, which can automatically align similar column names (e.g., mapping "Employee Name" to "Full Name"). Users can review and adjust mappings manually if needed to ensure compatibility with the model.
   
 - **Attrition Prediction**: Predicts employee attrition risk using a Random Forest Classifier based on factors such as tenure, compensation, promotion history, and performance metrics.
 
@@ -19,9 +21,9 @@ Employee turnover remains a significant cost factor, with U.S. businesses incurr
 
 - **Personalized Retention Strategy with Generative AI**: Provides detailed retention strategies by analyzing various aspects of employee data, including performance reviews, compensation history, benefits utilization, and engagement surveys. Generative AI enhances these insights by contextualizing unstructured information, enabling more nuanced and targeted recommendations.
 
-- **Interactive Chat Mode**: Enables managers to interact directly with the AI, asking questions about specific employees or discussing retention strategies. This mode leverages a conversational workflow, allowing for in-depth analysis and real-time feedback.
-
 - **PDF Export**: Exports detailed retention strategies and summaries as PDF files, allowing for documentation and easy sharing within the organization.
+
+- **Interactive Chat Mode**: Enables managers to interact directly with the AI, asking questions about specific employees or discussing retention strategies. This mode leverages a conversational workflow, allowing for in-depth analysis and real-time feedback.
 
 
 ## Why Use Gen AI?
