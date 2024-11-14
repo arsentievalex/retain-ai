@@ -256,7 +256,7 @@ class RetentionFlow(Workflow):
 
         # Stream and collect response chunks for final output
         chunks = []
-        for chunk in response.response_gen:
+        for chunk in st.write_stream(response.response_gen):
             chunks.append(chunk)
 
         # Form the complete recommendation response
