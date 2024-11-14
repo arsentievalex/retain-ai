@@ -1,5 +1,5 @@
 import streamlit as st
-from utils import get_chat_engine, get_query_engine, get_employee_snapshot
+from utils import get_chat_engine, get_query_engine, get_employee_snapshot, rename_and_filter_columns
 from llama_index.core.llms import ChatMessage, MessageRole
 from llama_index.core import PromptTemplate
 
@@ -18,10 +18,17 @@ def main():
         st.warning("Start with Data Upload tab to upload your files or use sample dataset")
         return
 
+    # Load employee data, applying renaming and filtering based on mappings if not in demo mode
+    df = (
+        st.session_state["employee data_df"]
+        if st.session_state["demo_mode"]
+        else rename_and_filter_columns(st.session_state["employee data_df"], st.session_state["employee_mappings"])
+    )
+
     # Generate a full snapshot of all employees to provide necessary context for the LLM model
     full_snapshot = "\n".join(
-        get_employee_snapshot(st.session_state["employee data_df"].iloc[[index]]) 
-        for index, _ in st.session_state["employee data_df"].iloc[:10].iterrows()
+        get_employee_snapshot(df.iloc[[index]]) 
+        for index, _ in df.iloc[:10].iterrows()
     )
 
     # Initialize chat messages history if it doesn't already exist
